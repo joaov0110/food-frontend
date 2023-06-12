@@ -1,0 +1,19 @@
+.navigation {
+  height: 100vh;
+  background-color: #f9fafb;
+  border-right: 1px dashed rgba(128, 128, 128, 0.5);
+
+  &__text {
+    span {
+      font-weight: 600;
+      opacity: 0.6;
+    }
+  }
+
+  &__link {
+    text-decoration: none;
+    color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+  }
+}

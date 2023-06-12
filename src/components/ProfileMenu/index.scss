@@ -1,0 +1,45 @@
+.profile {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  &-container {
+    &__avatar {
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+    &__info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start !important;
+      &__userName {
+        span {
+          font-weight: 600;
+        }
+      }
+
+      &__userEmail {
+        span {
+          color: #818181;
+        }
+      }
+    }
+
+    &__menu {
+      position: absolute !important;
+      width: 220px;
+      left: -70px;
+      top: 50px;
+      background-color: #fff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+
+      a {
+        color: #000;
+      }
+    }
+  }
+}
