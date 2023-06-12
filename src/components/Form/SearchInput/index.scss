@@ -1,0 +1,30 @@
+.search {
+  &-container {
+    &__open.MuiButton-root {
+      border-radius: 50%;
+      min-width: 40px;
+      min-height: 40px;
+    }
+
+    &__input {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+      background-color: rgba(249, 250, 251, 0.8);
+      backdrop-filter: blur(8px);
+
+      padding: 40px;
+
+      &__field {
+        flex-grow: 1;
+        margin-right: 20px;
+      }
+    }
+  }
+}
