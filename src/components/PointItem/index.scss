@@ -1,0 +1,40 @@
+.point {
+  &_item {
+    & {
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+      overflow: hidden;
+      &:hover {
+        transform: scale(1.04);
+      }
+    }
+
+    &__cover {
+      img {
+        width: 100%;
+        min-height: 150px;
+      }
+    }
+
+    &__info {
+      padding: 20px;
+
+      &__image {
+        display: flex;
+        justify-content: center;
+        margin-top: -50px;
+        img {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      &__address {
+        font-size: 14px;
+        color: #575757;
+      }
+    }
+  }
+}
