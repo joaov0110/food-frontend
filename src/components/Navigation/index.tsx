@@ -11,9 +11,15 @@ import {
 } from "@mui/material";
 import { Inbox } from "@mui/icons-material";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import ProfileWidget from "../ProfileWidget";
+
+interface INavLinkState {
+  isActive: boolean;
+  isPending: boolean;
+  link: string;
+}
 
 interface IshapeNavigation {
   id: number;
@@ -39,35 +45,62 @@ const navigationItems = [
     text: "Dashboard",
     link: "/dashboard",
   }),
-  shapeNavigationItems({ id: 1, icon: "", text: "Points", link: "points" }),
-  shapeNavigationItems({ id: 2, icon: "", text: "Catalogs", link: "catalogs" }),
+  shapeNavigationItems({
+    id: 1,
+    icon: "",
+    text: "Points",
+    link: "/dashboard/points",
+  }),
+  shapeNavigationItems({
+    id: 2,
+    icon: "",
+    text: "Catalogs",
+    link: "/dashboard/catalogs",
+  }),
 ];
 
 const Navigation: FC = () => {
-  const renderNavigationItems = () => {
-    return navigationItems.map((navItem) => {
-      return (
-        <ListItem key={navItem.id}>
-          <ListItemButton>
-            <Link to={navItem.link} className="navigation__link">
-              <ListItemIcon>
-                <Inbox />
-              </ListItemIcon>
-              <ListItemText
-                primary={navItem.text}
-                className="navigation__text"
-              />
-            </Link>
-          </ListItemButton>
-        </ListItem>
-      );
-    });
+  const handleActiveLink = (state: INavLinkState) => {
+    const { isActive, isPending } = state;
+
+    let classes = "navigation__link";
+
+    if (isActive) {
+      classes += " active";
+    }
+
+    if (isPending) {
+      classes += " pending";
+    }
+
+    return classes;
   };
+
+  const renderNavigationItems = navigationItems.map((navItem) => {
+    return (
+      <ListItem key={navItem.id}>
+        <ListItemButton className="navigation__btn">
+          <NavLink
+            to={navItem.link}
+            className={({ isActive, isPending }) =>
+              handleActiveLink({ isActive, isPending, link: navItem.link })
+            }
+            end
+          >
+            <ListItemIcon>
+              <Inbox />
+            </ListItemIcon>
+            <ListItemText primary={navItem.text} className="navigation__text" />
+          </NavLink>
+        </ListItemButton>
+      </ListItem>
+    );
+  });
 
   return (
     <nav className="navigation" aria-label="main navigation">
       <ProfileWidget />
-      <List disablePadding>{renderNavigationItems()}</List>
+      <List disablePadding>{renderNavigationItems}</List>
     </nav>
   );
 };
