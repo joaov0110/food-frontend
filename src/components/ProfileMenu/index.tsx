@@ -12,9 +12,12 @@ import {
   ClickAwayListener,
   Fade,
   Box,
+  Skeleton,
 } from "@mui/material";
 
 import { Link } from "react-router-dom";
+
+import useUser from "../../hooks/useUser";
 
 interface IshapeMenuItems {
   text: string;
@@ -33,13 +36,16 @@ const shapeMenuItems = (data: IshapeMenuItems) => {
 };
 
 const menuItems = [
-  shapeMenuItems({ text: "Home", link: "/", divider: true }),
   shapeMenuItems({ text: "Profile", link: "/profile" }),
   shapeMenuItems({ text: "Logout", link: "/logout", divider: true }),
 ];
 
 const ProfileMenu: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const {
+    user: { isLoading, isError, data },
+  } = useUser();
 
   const handleShowMenu = () => {
     setShowMenu((previousValue) => {
@@ -68,6 +74,10 @@ const ProfileMenu: FC = () => {
     });
   };
 
+  if (isLoading || isError) {
+    return <Skeleton variant="circular" width={40} height={40} />;
+  }
+
   return (
     <div className="profile">
       <ClickAwayListener onClickAway={handleHideMenu}>
@@ -87,10 +97,10 @@ const ProfileMenu: FC = () => {
               >
                 <ListItem className="profile-container__info">
                   <ListItemText className="profile-container__info__userName">
-                    John Doe
+                    {data?.name}
                   </ListItemText>
                   <ListItemText className="profile-container__info__userEmail">
-                    johnDoe@gmail.com
+                    {data?.email}
                   </ListItemText>
                 </ListItem>
 
