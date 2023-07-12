@@ -1,0 +1,14 @@
+.profile {
+  &__settings {
+    &__image {
+      display: flex;
+      justify-content: center;
+
+      .profileImage {
+        &__container {
+          top: -50px;
+        }
+      }
+    }
+  }
+}
