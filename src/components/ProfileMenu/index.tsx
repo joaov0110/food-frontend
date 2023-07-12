@@ -36,7 +36,7 @@ const shapeMenuItems = (data: IshapeMenuItems) => {
 };
 
 const menuItems = [
-  shapeMenuItems({ text: "Profile", link: "/profile" }),
+  shapeMenuItems({ text: "Profile", link: "profile" }),
   shapeMenuItems({ text: "Logout", link: "/logout", divider: true }),
 ];
 
@@ -79,11 +79,11 @@ const ProfileMenu: FC = () => {
   }
 
   return (
-    <div className="profile">
+    <div className="profileMenu">
       <ClickAwayListener onClickAway={handleHideMenu}>
-        <div className="profile-container">
+        <div className="profileMenu-container">
           <Avatar
-            className="profile-container__avatar"
+            className="profileMenu-container__avatar"
             src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
             alt="profile picture"
             onClick={handleShowMenu}
@@ -92,14 +92,16 @@ const ProfileMenu: FC = () => {
           <Fade in={showMenu}>
             <Box>
               <List
-                className={`profile-container__menu ${showMenu && "show-menu"}`}
+                className={`profileMenu-container__menu ${
+                  showMenu && "show-menu"
+                }`}
                 aria-label="navigation profile"
               >
-                <ListItem className="profile-container__info">
-                  <ListItemText className="profile-container__info__userName">
+                <ListItem className="profileMenu-container__info">
+                  <ListItemText className="profileMenu-container__info__userName">
                     {data?.name}
                   </ListItemText>
-                  <ListItemText className="profile-container__info__userEmail">
+                  <ListItemText className="profileMenu-container__info__userEmail">
                     {data?.email}
                   </ListItemText>
                 </ListItem>
