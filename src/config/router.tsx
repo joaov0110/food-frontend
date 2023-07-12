@@ -5,6 +5,7 @@ import Dashboard from "../views/Dashboard";
 import Points from "../views/Points";
 import NotFound from "../views/NotFound";
 import Point from "../views/Points/Point";
+import Profile from "../views/Profile";
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
           {
             path: "points/:point_id",
             element: <Point />,
+          },
+          {
+            path: "profile",
+            element: <Profile />,
           },
         ],
       },
