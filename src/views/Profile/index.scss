@@ -1,0 +1,19 @@
+.profile {
+  &__settings {
+    &__image {
+      display: flex;
+      justify-content: center;
+
+      .profileImage {
+        &__container {
+          top: -50px;
+        }
+      }
+    }
+
+    .button-container {
+      display: flex;
+      justify-content: center;
+    }
+  }
+}
