@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo } from "react";
 
 import { debounce } from "lodash";
 
-import httpClient from "../config/axios";
+import axios from "axios";
 
 interface Iaddress {
   cep: string;
@@ -34,19 +34,24 @@ const useAddress = () => {
   const [addressData, setAddressData] = useState<Iaddress>(initialData);
 
   const getAddress = useCallback(async (postalCode: string) => {
-    httpClient.defaults.baseURL = "https://viacep.com.br/ws";
-    const { data } = await httpClient.get(`${postalCode}/json/`);
+    try {
+      const { data } = await axios.get(
+        `https://viacep.com.br/ws/${postalCode}/json/`
+      );
 
-    setAddressData((prev) => {
-      return {
-        ...prev,
-        data,
-      };
-    });
+      setAddressData((prev) => {
+        return {
+          ...prev,
+          ...data,
+        };
+      });
+    } catch (err: any) {
+      throw Error(err);
+    }
   }, []);
 
   const debouncedAddress = useMemo(() => {
-    return debounce(getAddress, 1000);
+    return debounce(getAddress, 2000);
   }, [getAddress]);
 
   return {
