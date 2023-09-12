@@ -1,31 +1,37 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import { Box, Grid } from "@mui/material";
-
-import * as yup from "yup";
 
 import TextInput from "../TextInput";
 
 import useAddress from "../../../hooks/useAddress";
+import useInitialRender from "../../../hooks/useInitialRender";
+
+import { useFormContext } from "react-hook-form";
 
 import "./index.scss";
 
-export const addressSchema = {
-  cep: yup.string().min(8).max(8).required("Field required"),
-  street: yup.string().min(5).max(30).required("Field required"),
-  street_number: yup.string().min(1).max(3).required("Field required"),
-  district: yup.string().min(2).max(20).required("Field required"),
-  city: yup.string().min(2).max(10).required("Field required"),
-  UF: yup.string().min(2).max(2).required("Field required"),
-};
-
 const Address: FC = () => {
-  const { addressData, debouncedAddress } = useAddress();
+  const {
+    addressData: { cep, logradouro, bairro, localidade, uf },
+    debouncedAddress,
+  } = useAddress();
+
+  const { setValue } = useFormContext();
+
+  const isInitialRender = useInitialRender();
+
+  useEffect(() => {
+    if (!isInitialRender) {
+      setValue("street", logradouro);
+      setValue("district", bairro);
+      setValue("UF", uf);
+      setValue("city", localidade);
+    }
+  }, [cep]);
 
   const onAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    console.log(value);
 
     debouncedAddress(value);
   };
@@ -35,7 +41,7 @@ const Address: FC = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={5}>
           <TextInput
-            name="cep"
+            name="postalCode"
             placeholder="CEP"
             customChange={onAddressChange}
           />
