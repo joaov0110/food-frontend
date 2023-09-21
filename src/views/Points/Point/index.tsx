@@ -1,32 +1,33 @@
-import "./index.scss";
-
 import { FC } from "react";
-
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate, useParams } from "react-router-dom";
 import { Avatar, Button } from "@mui/material";
-
 import { ArrowBack, Settings } from "@mui/icons-material";
+import CircularSpinner from "../../../components/Spinner";
+import usePoints from "../../../hooks/usePoints";
+import { IPoint } from "../../../interfaces/pointInterface";
+import { useQuery } from "react-query";
 
-interface IPoint {
-  point: {
-    // bg_url: string;
-    // image_url: string;
-    // point_name: string;
-    // point_address: {
-    //   street: string;
-    //   street_number: number;
-    //   district: string;
-    // };
-  };
-}
+import "./index.scss";
 
 const Point: FC = () => {
   const navigate = useNavigate();
 
+  const { point_id } = useParams();
+
+  const { getPoint } = usePoints();
+
+  const { isLoading, data } = useQuery<IPoint, Error>({
+    queryKey: ["point", point_id],
+    queryFn: () => getPoint(parseInt(point_id!, 10)),
+  });
+
   const handleGoBack = () => {
-    return navigate(-1);
+    return navigate("/dashboard/points");
   };
+
+  if (isLoading) {
+    return <CircularSpinner size={90} />;
+  }
 
   return (
     <section className="point">
@@ -48,7 +49,7 @@ const Point: FC = () => {
         <div className="point__info__image">
           <Avatar src="" alt="avatar" />
         </div>
-        <h2 className="point__info__name">Divino</h2>
+        <h2 className="point__info__name">{data?.name}</h2>
       </div>
     </section>
   );
