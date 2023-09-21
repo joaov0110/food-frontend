@@ -1,4 +1,4 @@
-import { FC, memo } from "react";
+import { FC } from "react";
 import { TextField } from "@mui/material";
 
 import { Controller, useFormContext } from "react-hook-form";
@@ -25,10 +25,11 @@ const TextInput: FC<ItextInput> = ({ name, placeholder, customChange }) => {
         <TextField
           value={value}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            onChange(e);
             if (customChange) {
               customChange(e);
             }
+
+            onChange(e);
           }}
           onBlur={onBlur}
           placeholder={placeholder}
