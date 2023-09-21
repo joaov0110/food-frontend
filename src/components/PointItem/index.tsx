@@ -9,24 +9,35 @@ import { Box, Avatar } from "@mui/material";
 interface IPointItem {
   point: {
     id: number;
-    // bg_url: string;
-    // image_url: string;
-    // point_name: string;
-    // point_address: {
-    //   street: string;
-    //   street_number: number;
-    //   district: string;
-    // };
+    name: string;
+    bgImage_url?: string | null;
+    image_url?: string | null;
+    point_address: {
+      street?: string | null;
+      street_number?: string | null;
+      district?: string | null;
+    };
   };
 }
 
 const PointItem: FC<IPointItem> = memo(({ point }) => {
-  const { id } = point;
+  const { id, name, point_address } = point;
 
   const navigate = useNavigate();
 
   const handleNavigation = () => {
     return navigate(`${id}`);
+  };
+
+  const renderAddressInfo = () => {
+    if (point_address.street) {
+      return (
+        <span className="point_item__info__address">
+          {point_address.street} {point_address.street_number} -
+          {point_address.district}
+        </span>
+      );
+    }
   };
 
   return (
@@ -42,10 +53,8 @@ const PointItem: FC<IPointItem> = memo(({ point }) => {
           <Avatar src="" alt="image" />
         </div>
 
-        <h3 className="point_item__info__name">Divino</h3>
-        <span className="point_item__info__address">
-          Rua Cantanhede 300 - Pirajussara
-        </span>
+        <h3 className="point_item__info__name">{name}</h3>
+        {renderAddressInfo()}
       </Box>
     </Box>
   );
