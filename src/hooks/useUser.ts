@@ -1,19 +1,8 @@
 import httpClient from "../config/axios";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import errorMessage from "../utils/errorMessage";
-
+import { Iaddress } from "../interfaces/addressInterface";
 const prefix = "/tenants";
-
-interface Iaddress {
-  postalCode: string;
-  street: string;
-  street_number: string;
-  district: string;
-  city: string;
-  UF: string;
-  created_at: Date;
-  updated_at: Date | null;
-}
 
 interface Iuser {
   id: number;
