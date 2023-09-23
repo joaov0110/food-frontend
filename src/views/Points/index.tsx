@@ -16,27 +16,15 @@ const Points: FC = () => {
     queryFn: fetchPoints,
   });
 
-  const renderPointsList = useMemo(() => {
+  const renderPointsList = () => {
     if (data?.length) {
       return data.map((point) => {
-        return (
-          <PointItem
-            key={point.id}
-            point={{
-              ...point,
-              point_address: {
-                street: point.address?.street,
-                street_number: point.address?.street_number,
-                district: point.address?.district,
-              },
-            }}
-          />
-        );
+        return <PointItem key={point.id} point={point} />;
       });
     }
 
     return null;
-  }, [data]);
+  };
 
   if (isLoading) {
     return <CircularSpinner size={90} />;
@@ -46,7 +34,7 @@ const Points: FC = () => {
     <section className="points">
       <h1 className="points__heading">Points</h1>
       <Grid container spacing={2}>
-        {renderPointsList}
+        {renderPointsList()}
       </Grid>
     </section>
   );

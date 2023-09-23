@@ -12,16 +12,14 @@ interface IPointItem {
     name: string;
     bgImage_url?: string | null;
     image_url?: string | null;
-    point_address: {
-      street?: string | null;
-      street_number?: string | null;
-      district?: string | null;
-    };
+    street?: string | null;
+    street_number?: string | null;
+    district?: string | null;
   };
 }
 
 const PointItem: FC<IPointItem> = memo(({ point }) => {
-  const { id, name, point_address } = point;
+  const { id, name, street, street_number, district } = point;
 
   const navigate = useNavigate();
 
@@ -30,11 +28,10 @@ const PointItem: FC<IPointItem> = memo(({ point }) => {
   };
 
   const renderAddressInfo = () => {
-    if (point_address.street) {
+    if (street) {
       return (
         <span className="point_item__info__address">
-          {point_address.street} {point_address.street_number} -
-          {point_address.district}
+          {street} {street_number} -{district}
         </span>
       );
     }
