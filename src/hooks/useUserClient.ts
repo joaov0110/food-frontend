@@ -1,5 +1,5 @@
 import httpClient from "../config/axios";
-import { useQuery, useMutation, useQueryClient } from "react-query";
+import { useQueryClient } from "react-query";
 import errorMessage from "../utils/errorMessage";
 import { Iaddress } from "../interfaces/addressInterface";
 const prefix = "/tenants";
@@ -19,7 +19,7 @@ interface Iuser {
   updated_at: Date | null;
 }
 
-interface IgetUser extends Iuser {
+export interface IgetUser extends Iuser {
   address: Iaddress | null;
 }
 
@@ -30,9 +30,7 @@ export type updateUser = Omit<
   Omit<Iaddress, "created_at" | "updated_at">;
 
 const useUser = () => {
-  const queryClient = useQueryClient();
-
-  const getUser = async (): Promise<IgetUser> => {
+  const fetchUser = async (): Promise<IgetUser> => {
     try {
       const { data } = await httpClient.get(`${prefix}/tenant`);
 
@@ -86,13 +84,8 @@ const useUser = () => {
   };
 
   return {
-    user: useQuery<IgetUser, Error>({ queryKey: ["user"], queryFn: getUser }),
-
-    updateUser: useMutation(updateUser, {
-      onSuccess: () => {
-        queryClient.invalidateQueries("user");
-      },
-    }),
+    fetchUser,
+    updateUser,
   };
 };
 

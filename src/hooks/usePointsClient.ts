@@ -1,5 +1,4 @@
 import httpClient from "../config/axios";
-import { useQuery, useMutation, useQueryClient } from "react-query";
 import errorMessage from "../utils/errorMessage";
 import { IPoint } from "../interfaces/pointInterface";
 
@@ -7,6 +6,7 @@ const prefix = "/points";
 
 const usePoints = () => {
   const fetchPoint = async (point_id: number): Promise<IPoint> => {
+    console.log("Fetch point");
     try {
       const { data } = await httpClient.get<IPoint>(`${prefix}/${point_id}`);
 
@@ -17,6 +17,7 @@ const usePoints = () => {
   };
 
   const fetchPoints = async (): Promise<IPoint[]> => {
+    console.log("fetch points");
     try {
       const { data } = await httpClient.get<IPoint[]>(`${prefix}`);
 
@@ -27,11 +28,8 @@ const usePoints = () => {
   };
 
   return {
-    getPoint: fetchPoint,
-    getPoints: useQuery<IPoint[], Error>({
-      queryKey: ["points"],
-      queryFn: fetchPoints,
-    }),
+    fetchPoint,
+    fetchPoints,
   };
 };
 
