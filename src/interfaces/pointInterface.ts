@@ -11,3 +11,9 @@ export interface IPoint {
   updated_at: Date | null;
   address: Iaddress | null;
 }
+
+export interface InewPoint {
+  name: string;
+  email: string;
+  phone: string;
+}
