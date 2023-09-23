@@ -1,10 +1,11 @@
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { useQuery } from "react-query";
 import { IPoint } from "../../interfaces/pointInterface";
 import { Grid } from "@mui/material";
 import PointItem from "../../components/PointItem";
 import usePoints from "../../hooks/usePointsClient";
 import CircularSpinner from "../../components/Spinner";
+import AddPointDialog from "../../components/AddPointDialog";
 import { GET_POINTS } from "../../constants/queries";
 import "./index.scss";
 
@@ -32,7 +33,10 @@ const Points: FC = () => {
 
   return (
     <section className="points">
-      <h1 className="points__heading">Points</h1>
+      <header className="points__header">
+        <h1 className="points__heading">Points</h1>
+        <AddPointDialog />
+      </header>
       <Grid container spacing={2}>
         {renderPointsList()}
       </Grid>
