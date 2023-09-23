@@ -1,12 +1,12 @@
 import { FC } from "react";
+import { IPoint } from "../../../interfaces/pointInterface";
 import { useNavigate, useParams } from "react-router-dom";
+import { useQuery } from "react-query";
 import { Avatar, Button } from "@mui/material";
 import { ArrowBack, Settings } from "@mui/icons-material";
 import CircularSpinner from "../../../components/Spinner";
-import usePoints from "../../../hooks/usePoints";
-import { IPoint } from "../../../interfaces/pointInterface";
-import { useQuery } from "react-query";
-
+import usePoints from "../../../hooks/usePointsClient";
+import { GET_POINT } from "../../../constants/queries";
 import "./index.scss";
 
 const Point: FC = () => {
@@ -14,11 +14,11 @@ const Point: FC = () => {
 
   const { point_id } = useParams();
 
-  const { getPoint } = usePoints();
+  const { fetchPoint } = usePoints();
 
   const { isLoading, data } = useQuery<IPoint, Error>({
-    queryKey: ["point", point_id],
-    queryFn: () => getPoint(parseInt(point_id!, 10)),
+    queryKey: [GET_POINT, point_id],
+    queryFn: () => fetchPoint(parseInt(point_id!, 10)),
   });
 
   const handleGoBack = () => {

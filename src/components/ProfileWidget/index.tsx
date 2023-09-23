@@ -4,12 +4,17 @@ import { FC } from "react";
 
 import { Avatar, Skeleton } from "@mui/material";
 
-import useUser from "../../hooks/useUser";
+import useUser from "../../hooks/useUserClient";
+import { useQuery } from "react-query";
+import { GET_USER } from "../../constants/queries";
 
 const ProfileWidget: FC = () => {
-  const {
-    user: { isLoading, isError, data },
-  } = useUser();
+  const { fetchUser } = useUser();
+
+  const { isLoading, isError, data } = useQuery({
+    queryKey: [GET_USER],
+    queryFn: fetchUser,
+  });
 
   if (isLoading || isError) {
     return <Skeleton variant="rectangular" width={210} height={60} />;

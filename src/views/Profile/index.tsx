@@ -1,23 +1,35 @@
 import { FC } from "react";
+import { useQuery, useMutation, useQueryClient } from "react-query";
 import CoverImage from "../../components/CoverImage";
 import ProfileImage from "../../components/ProfileImage";
 import { Box, Skeleton, Grid } from "@mui/material";
 import { Check } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
 import { yupResolver } from "@hookform/resolvers/yup";
-import useUser, { updateUser } from "../../hooks/useUser";
+import useUser, { IgetUser, updateUser } from "../../hooks/useUserClient";
 import { useForm, FormProvider } from "react-hook-form";
 import TextInput from "../../components/Form/TextInput";
 import AppAlert from "../../components/Alert";
 import Address from "../../components/Form/Address";
 import profileSchema from "../../schemas/profileSchema";
 import "./index.scss";
+import { GET_USER } from "../../constants/queries";
 
 const Profile: FC = () => {
-  const {
-    user: { isLoading, isError, data },
-    updateUser,
-  } = useUser();
+  const queryClient = useQueryClient();
+
+  const { fetchUser, updateUser } = useUser();
+
+  const { isLoading, isError, data } = useQuery<IgetUser, Error>({
+    queryKey: [GET_USER],
+    queryFn: fetchUser,
+  });
+
+  const editUser = useMutation(updateUser, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("user");
+    },
+  });
 
   const methods = useForm({
     resolver: yupResolver(profileSchema),
@@ -42,7 +54,7 @@ const Profile: FC = () => {
   const { handleSubmit } = methods;
 
   const submit = (data: updateUser) => {
-    updateUser.mutate(data);
+    editUser.mutate(data);
   };
 
   if (isLoading || isError) {
@@ -53,11 +65,11 @@ const Profile: FC = () => {
     <>
       <AppAlert
         data={{
-          type: updateUser.isError ? "error" : "success",
-          message: updateUser.isError
-            ? (updateUser.error as string)
+          type: editUser.isError ? "error" : "success",
+          message: editUser.isError
+            ? (editUser.error as string)
             : "Profile updated",
-          open: updateUser.isError || updateUser.isSuccess,
+          open: editUser.isError || editUser.isSuccess,
         }}
       />
       <FormProvider {...methods}>
@@ -102,7 +114,7 @@ const Profile: FC = () => {
             <LoadingButton
               variant="contained"
               endIcon={<Check />}
-              loading={updateUser.isLoading}
+              loading={editUser.isLoading}
               loadingPosition="end"
               onClick={handleSubmit(submit)}
             >

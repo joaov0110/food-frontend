@@ -1,6 +1,7 @@
 import "./index.scss";
 
 import { FC, useState } from "react";
+import { useQuery } from "react-query";
 
 import {
   List,
@@ -17,7 +18,8 @@ import {
 
 import { Link } from "react-router-dom";
 
-import useUser from "../../hooks/useUser";
+import useUser from "../../hooks/useUserClient";
+import { GET_USER } from "../../constants/queries";
 
 interface IshapeMenuItems {
   text: string;
@@ -43,9 +45,12 @@ const menuItems = [
 const ProfileMenu: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const {
-    user: { isLoading, isError, data },
-  } = useUser();
+  const { fetchUser } = useUser();
+
+  const { isLoading, isError, data } = useQuery({
+    queryKey: [GET_USER],
+    queryFn: fetchUser,
+  });
 
   const handleShowMenu = () => {
     setShowMenu((previousValue) => {
