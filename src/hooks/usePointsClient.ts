@@ -10,8 +10,8 @@ const usePoints = () => {
       const { data } = await httpClient.get<IPoint>(`${prefix}/${point_id}`);
 
       return data;
-    } catch (err) {
-      throw new Error(errorMessage(err));
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
     }
   };
 
@@ -20,8 +20,8 @@ const usePoints = () => {
       const { data } = await httpClient.get<IPoint[]>(`${prefix}`);
 
       return data;
-    } catch (err) {
-      throw new Error(errorMessage(err));
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
     }
   };
 
@@ -33,8 +33,8 @@ const usePoints = () => {
       });
 
       return data;
-    } catch (err) {
-      throw new Error(errorMessage(err));
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
     }
   };
 
