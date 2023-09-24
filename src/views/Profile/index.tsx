@@ -9,16 +9,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import useUser, { IgetUser, updateUser } from "../../hooks/useUserClient";
 import { useForm, FormProvider } from "react-hook-form";
 import TextInput from "../../components/Form/TextInput";
-import AppAlert from "../../components/Alert";
 import Address from "../../components/Form/Address";
 import profileSchema from "../../schemas/profileSchema";
 import "./index.scss";
 import { GET_USER } from "../../constants/queries";
+import { useWarningMethods } from "../../hooks/useWarning";
 
 const Profile: FC = () => {
   const queryClient = useQueryClient();
 
   const { fetchUser, updateUser } = useUser();
+
+  const { openWarning } = useWarningMethods();
 
   const { isLoading, isError, data } = useQuery<IgetUser, Error>({
     queryKey: [GET_USER],
@@ -28,6 +30,16 @@ const Profile: FC = () => {
   const editUser = useMutation(updateUser, {
     onSuccess: () => {
       queryClient.invalidateQueries("user");
+      openWarning({
+        type: "success",
+        message: "Profile updated",
+      });
+    },
+    onError: (err: any) => {
+      openWarning({
+        type: "error",
+        message: err,
+      });
     },
   });
 
@@ -62,68 +74,51 @@ const Profile: FC = () => {
   }
 
   return (
-    <>
-      <AppAlert
-        data={{
-          type: editUser.isError ? "error" : "success",
-          message: editUser.isError
-            ? (editUser.error as string)
-            : "Profile updated",
-          open: editUser.isError || editUser.isSuccess,
-        }}
-      />
-      <FormProvider {...methods}>
-        <Box component="form" className="profile__settings">
-          <CoverImage />
-          <Box className="profile__settings__image">
-            <ProfileImage />
-          </Box>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={4} className="input-item">
-              <TextInput name="name" placeholder="Name" />
-            </Grid>
-            <Grid item xs={12} sm={4} className="input-item">
-              <TextInput name="email" placeholder="Email" />
-            </Grid>
-            <Grid item xs={12} sm={4} className="input-item">
-              <TextInput name="document" placeholder="Document" />
-            </Grid>
-          </Grid>
-
-          <Grid container spacing={3}>
-            <Grid item xs={12} sm={4} className="input-item">
-              <TextInput name="accountant_name" placeholder="Accountant name" />
-            </Grid>
-            <Grid item xs={12} sm={4} className="input-item">
-              <TextInput
-                name="accountant_email"
-                placeholder="Accountant email"
-              />
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <TextInput
-                name="accountant_phone"
-                placeholder="Accountant phone"
-              />
-            </Grid>
-          </Grid>
-          <Address />
-
-          <Box className="button-container">
-            <LoadingButton
-              variant="contained"
-              endIcon={<Check />}
-              loading={editUser.isLoading}
-              loadingPosition="end"
-              onClick={handleSubmit(submit)}
-            >
-              Salvar
-            </LoadingButton>
-          </Box>
+    <FormProvider {...methods}>
+      <Box component="form" className="profile__settings">
+        <CoverImage />
+        <Box className="profile__settings__image">
+          <ProfileImage />
         </Box>
-      </FormProvider>
-    </>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4} className="input-item">
+            <TextInput name="name" placeholder="Name" />
+          </Grid>
+          <Grid item xs={12} sm={4} className="input-item">
+            <TextInput name="email" placeholder="Email" />
+          </Grid>
+          <Grid item xs={12} sm={4} className="input-item">
+            <TextInput name="document" placeholder="Document" />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={3}>
+          <Grid item xs={12} sm={4} className="input-item">
+            <TextInput name="accountant_name" placeholder="Accountant name" />
+          </Grid>
+          <Grid item xs={12} sm={4} className="input-item">
+            <TextInput name="accountant_email" placeholder="Accountant email" />
+          </Grid>
+          <Grid item xs={12} sm={4}>
+            <TextInput name="accountant_phone" placeholder="Accountant phone" />
+          </Grid>
+        </Grid>
+        <Address />
+
+        <Box className="button-container">
+          <LoadingButton
+            variant="contained"
+            endIcon={<Check />}
+            loading={editUser.isLoading}
+            loadingPosition="end"
+            onClick={handleSubmit(submit)}
+          >
+            Salvar
+          </LoadingButton>
+        </Box>
+      </Box>
+    </FormProvider>
   );
 };
 

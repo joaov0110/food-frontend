@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import * as yup from "yup";
 import { GET_POINTS } from "../../constants/queries";
 import { InewPoint } from "../../interfaces/pointInterface";
+import { useWarningMethods } from "../../hooks/useWarning";
 
 const createPointSchema = yup.object({
   name: yup.string().max(25).required("Field is required"),
@@ -18,10 +19,25 @@ const createPointSchema = yup.object({
 
 const AddPointDialog: FC = () => {
   const queryClient = useQueryClient();
+
   const { createPoint } = usePoints();
 
+  const { openWarning } = useWarningMethods();
+
   const cretePointMutation = useMutation(createPoint, {
-    onSuccess: () => queryClient.invalidateQueries(GET_POINTS),
+    onSuccess: () => {
+      queryClient.invalidateQueries(GET_POINTS),
+        openWarning({
+          type: "success",
+          message: "Point created",
+        });
+    },
+    onError: (err: any) => {
+      openWarning({
+        type: "error",
+        message: err.message,
+      });
+    },
   });
 
   const methods = useForm({
