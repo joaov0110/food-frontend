@@ -1,5 +1,5 @@
 import { FC } from "react";
-import CustomDialog from "../Dialog";
+import CustomDialog from "../Dialogs/Dialog";
 import { useForm, FormProvider } from "react-hook-form";
 import usePoints from "../../hooks/usePointsClient";
 import { useMutation, useQueryClient } from "react-query";
