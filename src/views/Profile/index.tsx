@@ -2,6 +2,7 @@ import { FC } from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import CoverImage from "../../components/CoverImage";
 import ProfileImage from "../../components/ProfileImage";
+import FileUploadDialog from "../../components/Dialogs/FileUploadDialog";
 import { Box, Skeleton, Grid } from "@mui/material";
 import { Check } from "@mui/icons-material";
 import { LoadingButton } from "@mui/lab";
@@ -78,7 +79,14 @@ const Profile: FC = () => {
       <Box component="form" className="profile__settings">
         <CoverImage />
         <Box className="profile__settings__image">
-          <ProfileImage />
+          <FileUploadDialog
+            data={{
+              dialogTitle: "Change profile picture",
+              confirmButtonText: "Save",
+              buttonType: "loading",
+              opener: <ProfileImage />,
+            }}
+          />
         </Box>
 
         <Grid container spacing={3}>
