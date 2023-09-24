@@ -16,13 +16,14 @@ import "./index.scss";
 interface ICustomDialog {
   children: React.ReactNode;
   data: {
-    openerText: string;
+    openerText?: string;
     dialogLabel?: string;
     dialogTitle: string;
     closeButtonText?: string;
     confirmButtonText?: string;
     buttonType?: "default" | "loading";
     loadingState?: boolean;
+    opener?: React.ReactNode;
   };
   methods?: {
     confirmationAction?: () => void;
@@ -47,6 +48,7 @@ const CustomDialog: FC<ICustomDialog> = ({ children, data, methods }) => {
     confirmButtonText,
     buttonType,
     loadingState,
+    opener,
   } = data;
 
   const [open, setOpen] = useState(false);
@@ -87,12 +89,21 @@ const CustomDialog: FC<ICustomDialog> = ({ children, data, methods }) => {
     );
   }, [buttonType]);
 
-  return (
-    <div className="customDialog__container">
+  const renderOpener = () => {
+    if (opener) {
+      return <div onClick={handleOpen}>{opener}</div>;
+    }
+
+    return (
       <Button variant="contained" onClick={handleOpen}>
         {openerText}
       </Button>
+    );
+  };
 
+  return (
+    <div className="customDialog__container">
+      {renderOpener()}
       <Dialog
         fullWidth
         maxWidth="sm"
