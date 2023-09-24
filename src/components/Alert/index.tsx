@@ -1,34 +1,17 @@
-import { FC, useState, useEffect } from "react";
+import { FC } from "react";
 
-import { Alert, AlertColor } from "@mui/material";
+import { Alert } from "@mui/material";
+import { useWarningData, useWarningMethods } from "../../hooks/useWarning";
 
 import "./index.scss";
 
-interface IalertData {
-  open: boolean;
-  type: AlertColor;
-  message: string;
-}
+const AppAlert: FC = () => {
+  const { open, type, message } = useWarningData();
+  const { closeWarning } = useWarningMethods();
 
-interface IAlert {
-  data: IalertData;
-}
-
-const AppAlert: FC<IAlert> = (data) => {
-  const { open, type, message } = data.data;
-  const [openAlert, setOpenAlert] = useState(open);
-
-  useEffect(() => {
-    setOpenAlert(open);
-  }, [open]);
-
-  const handleOpenAlert = () => {
-    setOpenAlert((prev) => !prev);
-  };
-
-  if (openAlert) {
+  if (open) {
     return (
-      <Alert severity={type} className="app-alert" onClose={handleOpenAlert}>
+      <Alert severity={type} className="app-alert" onClose={closeWarning}>
         {message}
       </Alert>
     );
