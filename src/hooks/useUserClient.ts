@@ -86,7 +86,10 @@ const useUser = () => {
 
   const updateUserProfileImage = async (file: File) => {
     try {
-      const data = await httpClient.put(`${prefix}/tenant/profileImage`, file);
+      const data = await httpClient.put(
+        `${prefix}/tenant/profilePicture`,
+        file
+      );
 
       return data;
     } catch (err: any) {
