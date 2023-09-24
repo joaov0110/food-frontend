@@ -19,7 +19,7 @@ import { useWarningMethods } from "../../hooks/useWarning";
 const Profile: FC = () => {
   const queryClient = useQueryClient();
 
-  const { fetchUser, updateUser } = useUser();
+  const { fetchUser, updateUser, updateUserProfileImage } = useUser();
 
   const { openWarning } = useWarningMethods();
 
@@ -30,7 +30,7 @@ const Profile: FC = () => {
 
   const editUser = useMutation(updateUser, {
     onSuccess: () => {
-      queryClient.invalidateQueries("user");
+      queryClient.invalidateQueries(GET_USER);
       openWarning({
         type: "success",
         message: "Profile updated",
@@ -85,6 +85,9 @@ const Profile: FC = () => {
               confirmButtonText: "Save",
               buttonType: "loading",
               opener: <ProfileImage />,
+            }}
+            methods={{
+              uploader: updateUserProfileImage,
             }}
           />
         </Box>
