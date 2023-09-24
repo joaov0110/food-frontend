@@ -1,0 +1,45 @@
+.upload {
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__input {
+    display: none;
+  }
+
+  &__choose {
+    text-align: center;
+  }
+
+  &__imagePreview {
+    position: relative;
+    img {
+      width: 200px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    &__close {
+      position: absolute;
+      top: 10px;
+      right: 0;
+      background-color: #2b7fc4;
+      height: 42px;
+      width: 42px;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      svg {
+        path {
+          fill: #ffff;
+        }
+      }
+    }
+  }
+}
