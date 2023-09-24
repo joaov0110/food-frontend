@@ -1,5 +1,4 @@
 import httpClient from "../config/axios";
-import { useQueryClient } from "react-query";
 import errorMessage from "../utils/errorMessage";
 import { Iaddress } from "../interfaces/addressInterface";
 const prefix = "/tenants";
@@ -36,7 +35,7 @@ const useUser = () => {
 
       return data;
     } catch (err: any) {
-      throw new Error(errorMessage(err));
+      throw new Error(errorMessage(err.response.data));
     }
   };
 
@@ -78,15 +77,27 @@ const useUser = () => {
           UF,
         },
       });
+
       return data;
     } catch (err: any) {
-      throw new Error(err);
+      throw new Error(errorMessage(err.response.data));
+    }
+  };
+
+  const updateUserProfileImage = async (file: File) => {
+    try {
+      const data = await httpClient.put(`${prefix}/tenant/profileImage`, file);
+
+      return data;
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
     }
   };
 
   return {
     fetchUser,
     updateUser,
+    updateUserProfileImage,
   };
 };
 
