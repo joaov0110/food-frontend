@@ -60,6 +60,7 @@ const useUser = () => {
 
     try {
       const { data } = await httpClient.put(`${prefix}/tenant`, {
+        tenant_id: 6,
         name,
         document,
         email,
