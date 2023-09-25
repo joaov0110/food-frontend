@@ -1,15 +1,15 @@
 import { FC } from "react";
-import CustomDialog from "../Dialogs/Dialog";
+import CustomDialog from "../Dialog";
 import { useForm, FormProvider } from "react-hook-form";
-import usePoints from "../../hooks/usePointsClient";
+import usePoints from "../../../hooks/usePointsClient";
 import { useMutation, useQueryClient } from "react-query";
 import { yupResolver } from "@hookform/resolvers/yup";
-import TextInput from "../Form/TextInput";
+import TextInput from "../../Form/TextInput";
 import { Grid } from "@mui/material";
 import * as yup from "yup";
-import { GET_POINTS } from "../../constants/queries";
-import { InewPoint } from "../../interfaces/pointInterface";
-import { useWarningMethods } from "../../hooks/useWarning";
+import { GET_POINTS } from "../../../constants/queries";
+import { InewPoint } from "../../../interfaces/pointInterface";
+import { useWarningMethods } from "../../../hooks/useWarning";
 
 const createPointSchema = yup.object({
   name: yup.string().max(25).required("Field is required"),
@@ -24,7 +24,7 @@ const AddPointDialog: FC = () => {
 
   const { openWarning } = useWarningMethods();
 
-  const cretePointMutation = useMutation(createPoint, {
+  const { mutate, isLoading } = useMutation(createPoint, {
     onSuccess: () => {
       queryClient.invalidateQueries(GET_POINTS),
         openWarning({
@@ -52,7 +52,7 @@ const AddPointDialog: FC = () => {
   const { handleSubmit } = methods;
 
   const submit = (data: InewPoint) => {
-    cretePointMutation.mutate(data);
+    mutate(data);
   };
 
   return (
@@ -61,6 +61,7 @@ const AddPointDialog: FC = () => {
         openerText: "Add point",
         dialogTitle: "New point",
         confirmButtonText: "Create",
+        loadingState: isLoading,
         buttonType: "loading",
       }}
       methods={{
