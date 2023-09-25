@@ -7,6 +7,7 @@ import { Avatar, Skeleton } from "@mui/material";
 import useUser from "../../hooks/useUserClient";
 import { useQuery } from "react-query";
 import { GET_USER } from "../../constants/queries";
+import { renderProfileImages } from "../../utils/renderProfileImages";
 
 const ProfileWidget: FC = () => {
   const { fetchUser } = useUser();
@@ -24,7 +25,7 @@ const ProfileWidget: FC = () => {
     <div className="profile-widget">
       <Avatar
         className="profile-container__avatar"
-        src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
+        src={renderProfileImages(data?.image_url)}
         alt="profile picture"
       />
       <p className="profile-widget__userName">{data?.name}</p>

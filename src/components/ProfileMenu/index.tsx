@@ -2,6 +2,7 @@ import "./index.scss";
 
 import { FC, useState } from "react";
 import { useQuery } from "react-query";
+import { renderProfileImages } from "../../utils/renderProfileImages";
 
 import {
   List,
@@ -89,7 +90,7 @@ const ProfileMenu: FC = () => {
         <div className="profileMenu-container">
           <Avatar
             className="profileMenu-container__avatar"
-            src="https://media.sproutsocial.com/uploads/2022/06/profile-picture.jpeg"
+            src={renderProfileImages(data?.image_url)}
             alt="profile picture"
             onClick={handleShowMenu}
           />
