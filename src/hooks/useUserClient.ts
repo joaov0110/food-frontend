@@ -97,10 +97,21 @@ const useUser = () => {
     }
   };
 
+  const updateUserCoverImage = async (file: File) => {
+    try {
+      const data = await httpClient.put(`${prefix}/tenant/coverPicture`, file);
+
+      return data;
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
+    }
+  };
+
   return {
     fetchUser,
     updateUser,
     updateUserProfileImage,
+    updateUserCoverImage,
   };
 };
 
