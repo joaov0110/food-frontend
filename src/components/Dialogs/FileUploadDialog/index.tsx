@@ -59,12 +59,7 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
   const handleDispatchMutation = () => {
     const formData = new FormData();
 
-    formData.append(
-      "profilePicture",
-      imageData.current?.image,
-      imageData.current?.imageName
-    );
-
+    formData.append("image", imageData.current?.image);
     uploadProfilePicture.mutate(formData);
   };
 
