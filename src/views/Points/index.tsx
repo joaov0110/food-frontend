@@ -5,7 +5,7 @@ import { Grid } from "@mui/material";
 import PointItem from "../../components/PointItem";
 import usePoints from "../../hooks/usePointsClient";
 import CircularSpinner from "../../components/Spinner";
-import AddPointDialog from "../../components/AddPointDialog";
+import AddPointDialog from "../../components/Dialogs/AddPointDialog";
 import { GET_POINTS } from "../../constants/queries";
 import "./index.scss";
 
