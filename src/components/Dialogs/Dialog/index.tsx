@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useState, forwardRef, useImperativeHandle } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -39,106 +39,112 @@ const Transition = React.forwardRef(
   }
 );
 
-const CustomDialog: FC<ICustomDialog> = ({ children, data, methods }) => {
-  const {
-    openerText,
-    dialogLabel,
-    dialogTitle,
-    closeButtonText,
-    confirmButtonText,
-    buttonType,
-    loadingState,
-    opener,
-  } = data;
+const CustomDialog = forwardRef(
+  ({ children, data, methods }: ICustomDialog, ref) => {
+    const {
+      openerText,
+      dialogLabel,
+      dialogTitle,
+      closeButtonText,
+      confirmButtonText,
+      buttonType,
+      loadingState,
+      opener,
+    } = data;
 
-  const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
-  const handleOpen = () => {
-    setOpen((previous) => !previous);
-  };
+    const handleOpen = () => {
+      setOpen((previous) => !previous);
+    };
 
-  const handleAction = () => {
-    if (methods?.confirmationAction) {
-      methods.confirmationAction();
-    }
+    useImperativeHandle(
+      ref,
+      () => ({
+        handleOpen,
+      }),
+      []
+    );
 
-    handleOpen();
-  };
+    const handleAction = () => {
+      methods?.confirmationAction && methods.confirmationAction();
+    };
 
-  const renderCloseButtonText = () => closeButtonText || "Fechar";
+    const renderCloseButtonText = () => closeButtonText || "Fechar";
 
-  const renderConfirmButtonText = () => confirmButtonText || "Confirmar";
+    const renderConfirmButtonText = () => confirmButtonText || "Confirmar";
 
-  const renderConfirmButton = useMemo(() => {
-    if (buttonType === "loading") {
+    const renderConfirmButton = () => {
+      if (buttonType === "loading") {
+        return (
+          <LoadingButton
+            variant="contained"
+            loading={loadingState}
+            onClick={handleAction}
+          >
+            {renderConfirmButtonText()}
+          </LoadingButton>
+        );
+      }
+
       return (
-        <LoadingButton
-          variant="contained"
-          loading={loadingState}
-          onClick={handleAction}
-        >
+        <Button variant="contained" onClick={handleAction}>
           {renderConfirmButtonText()}
-        </LoadingButton>
+        </Button>
       );
-    }
+    };
+
+    const renderOpener = () => {
+      if (opener) {
+        return <div onClick={handleOpen}>{opener}</div>;
+      }
+
+      return (
+        <Button variant="contained" onClick={handleOpen}>
+          {openerText}
+        </Button>
+      );
+    };
 
     return (
-      <Button variant="contained" onClick={handleAction}>
-        {renderConfirmButtonText()}
-      </Button>
-    );
-  }, [buttonType]);
-
-  const renderOpener = () => {
-    if (opener) {
-      return <div onClick={handleOpen}>{opener}</div>;
-    }
-
-    return (
-      <Button variant="contained" onClick={handleOpen}>
-        {openerText}
-      </Button>
-    );
-  };
-
-  return (
-    <div className="customDialog__container">
-      {renderOpener()}
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        TransitionComponent={Transition}
-        onClose={handleOpen}
-        aria-labelledby={dialogLabel || "Custom dialog"}
-        open={open}
-        className="customDialogBox"
-      >
-        <DialogTitle>{dialogTitle}</DialogTitle>
-
-        <IconButton
-          aria-label="close"
-          onClick={handleOpen}
-          sx={{
-            position: "absolute",
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
+      <div className="customDialog__container">
+        {renderOpener()}
+        <Dialog
+          fullWidth
+          maxWidth="sm"
+          TransitionComponent={Transition}
+          onClose={handleOpen}
+          aria-labelledby={dialogLabel || "Custom dialog"}
+          open={open}
+          className="customDialogBox"
         >
-          <Close />
-        </IconButton>
+          <DialogTitle>{dialogTitle}</DialogTitle>
 
-        <DialogContent dividers>{children}</DialogContent>
+          <IconButton
+            aria-label="close"
+            onClick={handleOpen}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 8,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <Close />
+          </IconButton>
 
-        <DialogActions>
-          <Button variant="outlined" onClick={handleOpen}>
-            {renderCloseButtonText()}
-          </Button>
-          {renderConfirmButton}
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
-};
+          <DialogContent dividers>{children}</DialogContent>
+
+          <DialogActions>
+            <Button variant="outlined" onClick={handleOpen}>
+              {renderCloseButtonText()}
+            </Button>
+            {renderConfirmButton()}
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
+);
 
 export default CustomDialog;

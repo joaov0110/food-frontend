@@ -23,27 +23,26 @@ interface IFileUploadDialog {
 const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
   const { openerText, dialogTitle, confirmButtonText, buttonType, opener } =
     data;
-
   const { uploader } = methods;
-
   const { openWarning } = useWarningMethods();
-
   const imageData = useRef<IimageInputData | null>({} as IimageInputData);
+  const customDialogRef = useRef<any>(null);
 
   const queryClient = useQueryClient();
 
-  const uploadProfilePicture = useMutation(uploader as MutationFunction, {
+  const { mutate, isLoading } = useMutation(uploader as MutationFunction, {
     onSuccess: () => {
       queryClient.invalidateQueries(GET_USER);
       openWarning({
         type: "success",
         message: "Profile image updated",
       });
+      handleCloseDialogOnSuccess();
     },
     onError: (err: any) => {
       openWarning({
         type: "error",
-        message: "Internal",
+        message: err,
       });
     },
   });
@@ -60,16 +59,22 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
     const formData = new FormData();
 
     formData.append("image", imageData.current?.image);
-    uploadProfilePicture.mutate(formData);
+    mutate(formData);
+  };
+
+  const handleCloseDialogOnSuccess = () => {
+    customDialogRef.current.handleOpen();
   };
 
   return (
     <CustomDialog
+      ref={customDialogRef}
       data={{
         openerText,
         dialogTitle,
         confirmButtonText,
         buttonType,
+        loadingState: isLoading,
         opener,
       }}
       methods={{
