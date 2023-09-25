@@ -15,6 +15,7 @@ import profileSchema from "../../schemas/profileSchema";
 import "./index.scss";
 import { GET_USER } from "../../constants/queries";
 import { useWarningMethods } from "../../hooks/useWarning";
+import { renderProfileImages } from "../../utils/renderProfileImages";
 
 const Profile: FC = () => {
   const queryClient = useQueryClient();
@@ -84,7 +85,9 @@ const Profile: FC = () => {
               dialogTitle: "Change profile picture",
               confirmButtonText: "Save",
               buttonType: "loading",
-              opener: <ProfileImage />,
+              opener: (
+                <ProfileImage image={renderProfileImages(data?.image_url)} />
+              ),
             }}
             methods={{
               uploader: updateUserProfileImage,
