@@ -20,7 +20,12 @@ import { renderProfileImages } from "../../utils/renderProfileImages";
 const Profile: FC = () => {
   const queryClient = useQueryClient();
 
-  const { fetchUser, updateUser, updateUserProfileImage } = useUser();
+  const {
+    fetchUser,
+    updateUser,
+    updateUserProfileImage,
+    updateUserCoverImage,
+  } = useUser();
 
   const { openWarning } = useWarningMethods();
 
@@ -78,7 +83,19 @@ const Profile: FC = () => {
   return (
     <FormProvider {...methods}>
       <Box component="form" className="profile__settings">
-        <CoverImage />
+        <FileUploadDialog
+          data={{
+            dialogTitle: "Change cover image",
+            confirmButtonText: "Save",
+            buttonType: "loading",
+            opener: (
+              <CoverImage image={renderProfileImages(data?.bgImage_url)} />
+            ),
+          }}
+          methods={{
+            uploader: updateUserCoverImage,
+          }}
+        />
         <Box className="profile__settings__image">
           <FileUploadDialog
             data={{
