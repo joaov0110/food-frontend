@@ -12,7 +12,22 @@ export interface IPoint {
   address: Iaddress | null;
 }
 
-export interface InewPoint {
+export interface IcreatePoint {
+  name: string;
+  email: string;
+  phone: string;
+}
+
+export interface IupdatePoint {
+  point_id: string;
+  name: string;
+  email: string;
+  phone: string;
+  address: Omit<Iaddress, "created_at" | "updated_at">;
+}
+
+export interface IupdatePointFormValues
+  extends Omit<Iaddress, "created_at" | "updated_at"> {
   name: string;
   email: string;
   phone: string;
