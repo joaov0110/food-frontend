@@ -14,7 +14,8 @@
     &__cover {
       img {
         width: 100%;
-        min-height: 150px;
+        object-fit: cover;
+        max-height: 150px;
       }
     }
 
