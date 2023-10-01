@@ -1,6 +1,10 @@
 import httpClient from "../config/axios";
 import errorMessage from "../utils/errorMessage";
-import { IPoint, InewPoint } from "../interfaces/pointInterface";
+import {
+  IPoint,
+  IcreatePoint,
+  IupdatePoint,
+} from "../interfaces/pointInterface";
 
 const prefix = "/points";
 
@@ -25,12 +29,22 @@ const usePoints = () => {
     }
   };
 
-  const createPoint = async (payload: InewPoint): Promise<any> => {
+  const createPoint = async (payload: IcreatePoint): Promise<IPoint> => {
     try {
       const { data } = await httpClient.post(`${prefix}/point`, {
         ...payload,
         tenant_id: 6,
       });
+
+      return data;
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
+    }
+  };
+
+  const updatePoint = async (payload: IupdatePoint): Promise<IPoint> => {
+    try {
+      const { data } = await httpClient.put(`${prefix}/point`, payload);
 
       return data;
     } catch (err: any) {
@@ -75,6 +89,7 @@ const usePoints = () => {
     fetchPoint,
     fetchPoints,
     createPoint,
+    updatePoint,
     updatePointProfilePicture,
     updatePointBgImage,
   };
