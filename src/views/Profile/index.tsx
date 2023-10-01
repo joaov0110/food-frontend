@@ -88,6 +88,7 @@ const Profile: FC = () => {
             dialogTitle: "Change cover image",
             confirmButtonText: "Save",
             buttonType: "loading",
+            invalidateQuery: GET_USER,
             opener: (
               <CoverImage image={renderProfileImages(data?.bgImage_url)} />
             ),
@@ -102,6 +103,7 @@ const Profile: FC = () => {
               dialogTitle: "Change profile picture",
               confirmButtonText: "Save",
               buttonType: "loading",
+              invalidateQuery: GET_USER,
               opener: (
                 <ProfileImage image={renderProfileImages(data?.image_url)} />
               ),
