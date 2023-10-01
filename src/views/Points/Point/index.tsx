@@ -2,11 +2,15 @@ import { FC } from "react";
 import { IPoint } from "../../../interfaces/pointInterface";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { Avatar, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { ArrowBack, Settings } from "@mui/icons-material";
+import ProfileImage from "../../../components/ProfileImage";
+import FileUploadDialog from "../../../components/Dialogs/FileUploadDialog";
 import CircularSpinner from "../../../components/Spinner";
 import usePoints from "../../../hooks/usePointsClient";
 import { GET_POINT } from "../../../constants/queries";
+import { renderProfileImages } from "../../../utils/renderProfileImages";
+import CoverImage from "../../../components/CoverImage";
 import "./index.scss";
 
 const Point: FC = () => {
@@ -14,7 +18,8 @@ const Point: FC = () => {
 
   const { point_id } = useParams();
 
-  const { fetchPoint } = usePoints();
+  const { fetchPoint, updatePointProfilePicture, updatePointBgImage } =
+    usePoints();
 
   const { isLoading, data } = useQuery<IPoint, Error>({
     queryKey: [GET_POINT, point_id],
@@ -36,18 +41,49 @@ const Point: FC = () => {
       </Button>
 
       <div className="point__cover">
-        <Button className="point__cover__settings_btn">
-          <Settings fontSize="large" color="primary" />
-        </Button>
-        <img
-          src="https://www.bookhubpublishing.com/wp-content/uploads/revslider/the7-book-header/bg-slider-book-1500x750.jpg"
-          alt="cover"
+        <FileUploadDialog
+          data={{
+            dialogTitle: "Change point cover image",
+            confirmButtonText: "Save",
+            buttonType: "loading",
+            opener: (
+              <CoverImage image={renderProfileImages(data?.bgImage_url)} />
+            ),
+            additionalReqParams: {
+              point_id: point_id!,
+            },
+            invalidateQuery: GET_POINT,
+          }}
+          methods={{
+            uploader: updatePointBgImage,
+          }}
         />
       </div>
 
       <div className="point__info">
         <div className="point__info__image">
-          <Avatar src="" alt="avatar" />
+          <FileUploadDialog
+            data={{
+              dialogTitle: "Change point profile image",
+              confirmButtonText: "Save",
+              buttonType: "loading",
+              opener: (
+                <ProfileImage image={renderProfileImages(data?.image_url)} />
+              ),
+              additionalReqParams: {
+                point_id: point_id!,
+              },
+              invalidateQuery: GET_POINT,
+            }}
+            methods={{
+              uploader: updatePointProfilePicture,
+            }}
+          />
+        </div>
+        <div className="point__info__settingsBtn__container">
+          <Button>
+            <Settings fontSize="large" color="primary" />
+          </Button>
         </div>
         <h2 className="point__info__name">{data?.name}</h2>
       </div>
