@@ -3,9 +3,10 @@ import { IPoint } from "../../../interfaces/pointInterface";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { Button } from "@mui/material";
-import { ArrowBack, Settings } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import ProfileImage from "../../../components/ProfileImage";
 import FileUploadDialog from "../../../components/Dialogs/FileUploadDialog";
+import UpdatePointDialog from "../../../components/Dialogs/UpdatePointDialog";
 import CircularSpinner from "../../../components/Spinner";
 import usePoints from "../../../hooks/usePointsClient";
 import { GET_POINT } from "../../../constants/queries";
@@ -81,11 +82,16 @@ const Point: FC = () => {
           />
         </div>
         <div className="point__info__settingsBtn__container">
-          <Button>
-            <Settings fontSize="large" color="primary" />
-          </Button>
+          <UpdatePointDialog />
         </div>
         <h2 className="point__info__name">{data?.name}</h2>
+        <div className="point__info__address">
+          <p>
+            {data?.address?.street}, {data?.address?.street_number},{" "}
+            {data?.address?.district} - {data?.address?.city},{" "}
+            {data?.address?.UF}
+          </p>
+        </div>
       </div>
     </section>
   );
