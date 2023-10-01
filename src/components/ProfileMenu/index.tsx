@@ -1,37 +1,28 @@
 import "./index.scss";
 
-import { FC, useState } from "react";
+import { FC, useRef } from "react";
 import { useQuery } from "react-query";
-import { renderProfileImages } from "../../utils/renderProfileImages";
 
-import {
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Divider,
-  Avatar,
-  ClickAwayListener,
-  Fade,
-  Box,
-  Skeleton,
-} from "@mui/material";
+import { ClickAwayListener, Skeleton } from "@mui/material";
 
-import { Link } from "react-router-dom";
+import Menu from "./Menu";
+import ProfileMenuItem from "./MenuItem";
 
 import useUser from "../../hooks/useUserClient";
 import { GET_USER } from "../../constants/queries";
 
 interface IshapeMenuItems {
+  id: number;
   text: string;
   link: string;
   divider?: boolean;
 }
 
 const shapeMenuItems = (data: IshapeMenuItems) => {
-  const { text, link, divider } = data;
+  const { id, text, link, divider } = data;
 
   return {
+    id,
     text,
     link,
     divider,
@@ -39,43 +30,32 @@ const shapeMenuItems = (data: IshapeMenuItems) => {
 };
 
 const menuItems = [
-  shapeMenuItems({ text: "Profile", link: "profile" }),
-  shapeMenuItems({ text: "Logout", link: "/logout", divider: true }),
+  shapeMenuItems({ id: 0, text: "Profile", link: "profile" }),
+  shapeMenuItems({ id: 1, text: "Logout", link: "/logout", divider: true }),
 ];
 
 const ProfileMenu: FC = () => {
-  const [showMenu, setShowMenu] = useState(false);
-
   const { fetchUser } = useUser();
+
+  const menuRef = useRef<any>(null);
 
   const { isLoading, isError, data } = useQuery({
     queryKey: [GET_USER],
     queryFn: fetchUser,
   });
 
-  const handleShowMenu = () => {
-    setShowMenu((previousValue) => {
-      return !previousValue;
-    });
-  };
-
   const handleHideMenu = () => {
-    setShowMenu(false);
+    menuRef.current.hideMenu();
   };
 
   const renderMenuItems = () => {
     return menuItems.map((item) => {
       return (
-        <div key={item.text}>
-          {item.divider && <Divider />}
-          <ListItem>
-            <ListItemButton onClick={handleHideMenu}>
-              <Link to={item.link}>
-                <ListItemText>{item.text}</ListItemText>
-              </Link>
-            </ListItemButton>
-          </ListItem>
-        </div>
+        <ProfileMenuItem
+          key={item.id}
+          data={item}
+          handleHideMenu={handleHideMenu}
+        />
       );
     });
   };
@@ -88,34 +68,16 @@ const ProfileMenu: FC = () => {
     <div className="profileMenu">
       <ClickAwayListener onClickAway={handleHideMenu}>
         <div className="profileMenu-container">
-          <Avatar
-            className="profileMenu-container__avatar"
-            src={renderProfileImages(data?.image_url)}
-            alt="profile picture"
-            onClick={handleShowMenu}
-          />
-
-          <Fade in={showMenu}>
-            <Box>
-              <List
-                className={`profileMenu-container__menu ${
-                  showMenu && "show-menu"
-                }`}
-                aria-label="navigation profile"
-              >
-                <ListItem className="profileMenu-container__info">
-                  <ListItemText className="profileMenu-container__info__userName">
-                    {data?.name}
-                  </ListItemText>
-                  <ListItemText className="profileMenu-container__info__userEmail">
-                    {data?.email}
-                  </ListItemText>
-                </ListItem>
-
-                {renderMenuItems()}
-              </List>
-            </Box>
-          </Fade>
+          <Menu
+            ref={menuRef}
+            data={{
+              name: data!.name,
+              email: data!.email,
+              image_url: data!.image_url,
+            }}
+          >
+            {renderMenuItems()}
+          </Menu>
         </div>
       </ClickAwayListener>
     </div>
