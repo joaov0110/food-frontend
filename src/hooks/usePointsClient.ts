@@ -38,10 +38,45 @@ const usePoints = () => {
     }
   };
 
+  const updatePointProfilePicture = async (
+    formData: FormData
+  ): Promise<any> => {
+    try {
+      const data = await httpClient.put(
+        `${prefix}/point/profileImage`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      return data;
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
+    }
+  };
+
+  const updatePointBgImage = async (formData: FormData): Promise<any> => {
+    try {
+      const data = await httpClient.put(`${prefix}/point/bgImage`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      return data;
+    } catch (err: any) {
+      throw new Error(errorMessage(err.response.data));
+    }
+  };
   return {
     fetchPoint,
     fetchPoints,
     createPoint,
+    updatePointProfilePicture,
+    updatePointBgImage,
   };
 };
 
