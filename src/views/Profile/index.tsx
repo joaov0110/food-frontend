@@ -35,11 +35,12 @@ const Profile: FC = () => {
   });
 
   const editUser = useMutation(updateUser, {
-    onSuccess: () => {
+    onSuccess: (response: any) => {
+      console.log("sdfsdfsdfsdfsdf", response);
       queryClient.invalidateQueries(GET_USER);
       openWarning({
         type: "success",
-        message: "Profile updated",
+        message: response,
       });
     },
     onError: (err: any) => {

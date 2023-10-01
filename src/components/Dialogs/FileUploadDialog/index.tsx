@@ -42,11 +42,12 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(uploader as MutationFunction, {
-    onSuccess: () => {
+    onSuccess: (response: any) => {
+      console.log("sdfsdfsdfsdfsdf", response);
       queryClient.invalidateQueries(invalidateQuery);
       openWarning({
         type: "success",
-        message: "Profile image updated",
+        message: response.data,
       });
       handleCloseDialogOnSuccess();
     },

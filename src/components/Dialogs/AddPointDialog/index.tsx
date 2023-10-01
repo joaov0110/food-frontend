@@ -25,11 +25,11 @@ const AddPointDialog: FC = () => {
   const { openWarning } = useWarningMethods();
 
   const { mutate, isLoading } = useMutation(createPoint, {
-    onSuccess: () => {
+    onSuccess: (response: any) => {
       queryClient.invalidateQueries(GET_POINTS),
         openWarning({
           type: "success",
-          message: "Point created",
+          message: response,
         });
     },
     onError: (err: any) => {
