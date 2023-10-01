@@ -7,6 +7,7 @@ import {
   Button,
   IconButton,
   Slide,
+  Breakpoint,
 } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import { Close } from "@mui/icons-material";
@@ -19,6 +20,7 @@ interface ICustomDialog {
     openerText?: string;
     dialogLabel?: string;
     dialogTitle: string;
+    dialogWidth?: Breakpoint;
     closeButtonText?: string;
     confirmButtonText?: string;
     disableButton?: boolean;
@@ -46,6 +48,7 @@ const CustomDialog = forwardRef(
       openerText,
       dialogLabel,
       dialogTitle,
+      dialogWidth,
       closeButtonText,
       confirmButtonText,
       disableButton,
@@ -114,7 +117,7 @@ const CustomDialog = forwardRef(
         {renderOpener()}
         <Dialog
           fullWidth
-          maxWidth="sm"
+          maxWidth={dialogWidth || "sm"}
           TransitionComponent={Transition}
           onClose={handleOpen}
           aria-labelledby={dialogLabel || "Custom dialog"}
