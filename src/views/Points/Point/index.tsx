@@ -31,6 +31,19 @@ const Point: FC = () => {
     return navigate("/dashboard/points");
   };
 
+  const renderAddressInfo = () => {
+    if (data?.address) {
+      return (
+        <p>
+          {data.address.street}, {data.address.street_number},
+          {data.address.district} - {data.address.city}, {data.address.UF}
+        </p>
+      );
+    }
+
+    return null;
+  };
+
   if (isLoading) {
     return <CircularSpinner size={90} />;
   }
@@ -85,13 +98,7 @@ const Point: FC = () => {
           <UpdatePointDialog />
         </div>
         <h2 className="point__info__name">{data?.name}</h2>
-        <div className="point__info__address">
-          <p>
-            {data?.address?.street}, {data?.address?.street_number},{" "}
-            {data?.address?.district} - {data?.address?.city},{" "}
-            {data?.address?.UF}
-          </p>
-        </div>
+        <div className="point__info__address">{renderAddressInfo()}</div>
       </div>
     </section>
   );
