@@ -1,4 +1,4 @@
-export const renderProfileImages = (image: string | null | undefined) => {
+export const renderProfileImages = (image?: string | null) => {
   if (image) {
     return image;
   }
