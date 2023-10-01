@@ -20,7 +20,20 @@ const Points: FC = () => {
   const renderPointsList = () => {
     if (data?.length) {
       return data.map((point) => {
-        return <PointItem key={point.id} point={point} />;
+        return (
+          <PointItem
+            key={point.id}
+            point={{
+              id: point.id,
+              name: point.name,
+              bgImage_url: point.bgImage_url,
+              image_url: point.image_url,
+              street: point.address?.street,
+              street_number: point.address?.street_number,
+              district: point.address?.district,
+            }}
+          />
+        );
       });
     }
 
