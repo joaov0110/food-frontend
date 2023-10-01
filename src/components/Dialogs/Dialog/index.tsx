@@ -1,4 +1,4 @@
-import React, { FC, useState, forwardRef, useImperativeHandle } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -21,6 +21,7 @@ interface ICustomDialog {
     dialogTitle: string;
     closeButtonText?: string;
     confirmButtonText?: string;
+    disableButton?: boolean;
     buttonType?: "default" | "loading";
     loadingState?: boolean;
     opener?: React.ReactNode;
@@ -47,6 +48,7 @@ const CustomDialog = forwardRef(
       dialogTitle,
       closeButtonText,
       confirmButtonText,
+      disableButton,
       buttonType,
       loadingState,
       opener,
@@ -80,6 +82,7 @@ const CustomDialog = forwardRef(
           <LoadingButton
             variant="contained"
             loading={loadingState}
+            disabled={disableButton}
             onClick={handleAction}
           >
             {renderConfirmButtonText()}

@@ -1,4 +1,4 @@
-import { FC, useRef } from "react";
+import { FC, useState, useRef } from "react";
 import { useQueryClient, useMutation, MutationFunction } from "react-query";
 import CustomDialog from "../Dialog";
 import FileInput from "../../Form/FileInput";
@@ -36,14 +36,17 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
   } = data;
   const { uploader } = methods;
   const { openWarning } = useWarningMethods();
-  const imageData = useRef<IimageInputData | null>({} as IimageInputData);
+
+  const [imageData, setImageData] = useState<IimageInputData>(
+    {} as IimageInputData
+  );
+
   const customDialogRef = useRef<any>(null);
 
   const queryClient = useQueryClient();
 
   const { mutate, isLoading } = useMutation(uploader as MutationFunction, {
     onSuccess: (response: any) => {
-      console.log("sdfsdfsdfsdfsdf", response);
       queryClient.invalidateQueries(invalidateQuery);
       openWarning({
         type: "success",
@@ -60,17 +63,17 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
   });
 
   const handleImageData = (data: IimageInputData) => {
-    imageData.current = { ...data };
+    setImageData({ ...data });
   };
 
   const handleWipeImageData = () => {
-    imageData.current = null;
+    setImageData({} as IimageInputData);
   };
 
   const handleDispatchMutation = () => {
     const formData = new FormData();
 
-    formData.append("image", imageData.current?.image);
+    formData.append("image", imageData.image);
 
     if (additionalReqParams) {
       for (const prop in additionalReqParams) {
@@ -94,6 +97,7 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
         confirmButtonText,
         buttonType,
         loadingState: isLoading,
+        disableButton: imageData.image === undefined,
         opener,
       }}
       methods={{
