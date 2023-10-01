@@ -84,11 +84,16 @@ const useUser = () => {
     }
   };
 
-  const updateUserProfileImage = async (file: File) => {
+  const updateUserProfileImage = async (formData: FormData) => {
     try {
       const data = await httpClient.put(
         `${prefix}/tenant/profilePicture`,
-        file
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       return data;
@@ -97,9 +102,17 @@ const useUser = () => {
     }
   };
 
-  const updateUserCoverImage = async (file: File) => {
+  const updateUserCoverImage = async (formData: FormData) => {
     try {
-      const data = await httpClient.put(`${prefix}/tenant/coverPicture`, file);
+      const data = await httpClient.put(
+        `${prefix}/tenant/coverPicture`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       return data;
     } catch (err: any) {
