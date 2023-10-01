@@ -19,9 +19,14 @@
       transform: translateY(-20px);
     }
 
+    &__address {
+      margin-top: -50px;
+    }
+
     &__settingsBtn__container {
       position: absolute;
-      top: 40px;
+      top: 50px;
+      left: 20px;
     }
   }
 }
