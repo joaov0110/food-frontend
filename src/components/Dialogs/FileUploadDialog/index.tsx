@@ -14,15 +14,26 @@ interface IFileUploadDialog {
     openerText?: string;
     buttonType?: "default" | "loading";
     opener?: React.ReactNode;
+    additionalReqParams?: {
+      [key: string]: number | string;
+    };
+    invalidateQuery: string;
   };
   methods: {
-    uploader: (file: File) => void;
+    uploader: (...args: any[]) => void;
   };
 }
 
 const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
-  const { openerText, dialogTitle, confirmButtonText, buttonType, opener } =
-    data;
+  const {
+    openerText,
+    dialogTitle,
+    confirmButtonText,
+    buttonType,
+    opener,
+    additionalReqParams,
+    invalidateQuery,
+  } = data;
   const { uploader } = methods;
   const { openWarning } = useWarningMethods();
   const imageData = useRef<IimageInputData | null>({} as IimageInputData);
@@ -32,7 +43,7 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
 
   const { mutate, isLoading } = useMutation(uploader as MutationFunction, {
     onSuccess: () => {
-      queryClient.invalidateQueries(GET_USER);
+      queryClient.invalidateQueries(invalidateQuery);
       openWarning({
         type: "success",
         message: "Profile image updated",
@@ -42,7 +53,7 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
     onError: (err: any) => {
       openWarning({
         type: "error",
-        message: err,
+        message: err.message,
       });
     },
   });
@@ -59,6 +70,13 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
     const formData = new FormData();
 
     formData.append("image", imageData.current?.image);
+
+    if (additionalReqParams) {
+      for (const prop in additionalReqParams) {
+        formData.append(prop, additionalReqParams[prop].toString());
+      }
+    }
+
     mutate(formData);
   };
 
