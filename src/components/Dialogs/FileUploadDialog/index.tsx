@@ -47,7 +47,7 @@ const FileUploadDialog: FC<IFileUploadDialog> = ({ data, methods }) => {
 
   const { mutate, isLoading } = useMutation(uploader as MutationFunction, {
     onSuccess: (response: any) => {
-      queryClient.invalidateQueries(invalidateQuery);
+      queryClient.invalidateQueries({ queryKey: invalidateQuery });
       openWarning({
         type: "success",
         message: response.data,

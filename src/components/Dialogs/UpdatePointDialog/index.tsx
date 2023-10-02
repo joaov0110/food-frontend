@@ -42,7 +42,7 @@ const UpdatePointDialog: FC = () => {
 
   const { mutate, isLoading } = useMutation(updatePoint, {
     onSuccess: (response: any) => {
-      queryClient.invalidateQueries(GET_POINTS),
+      queryClient.invalidateQueries({ queryKey: GET_POINTS }),
         openWarning({
           type: "success",
           message: response,

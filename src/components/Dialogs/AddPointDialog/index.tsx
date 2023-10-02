@@ -8,7 +8,7 @@ import TextInput from "../../Form/TextInput";
 import { Grid } from "@mui/material";
 import * as yup from "yup";
 import { GET_POINTS } from "../../../constants/queries";
-import { InewPoint } from "../../../interfaces/pointInterface";
+import { IcreatePoint } from "../../../interfaces/pointInterface";
 import { useWarningMethods } from "../../../hooks/useWarning";
 
 const createPointSchema = yup.object({
@@ -26,7 +26,7 @@ const AddPointDialog: FC = () => {
 
   const { mutate, isLoading } = useMutation(createPoint, {
     onSuccess: (response: any) => {
-      queryClient.invalidateQueries(GET_POINTS),
+      queryClient.invalidateQueries({ queryKey: GET_POINTS }),
         openWarning({
           type: "success",
           message: response,
@@ -51,7 +51,7 @@ const AddPointDialog: FC = () => {
 
   const { handleSubmit } = methods;
 
-  const submit = (data: InewPoint) => {
+  const submit = (data: IcreatePoint) => {
     mutate(data);
   };
 
