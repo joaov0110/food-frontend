@@ -1,0 +1,17 @@
+.catalogsList {
+  &__container {
+    text-align: center;
+  }
+  &__no-catalogs {
+    text-align: center;
+    padding: 20px 0 0px 0;
+    font-size: 36px;
+    opacity: 0.4;
+  }
+  &__heading {
+    text-align: left;
+    padding: 10px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  }
+}
