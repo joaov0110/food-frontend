@@ -12,6 +12,7 @@ import usePoints from "../../../hooks/usePointsClient";
 import { GET_POINT } from "../../../constants/queries";
 import { renderProfileImages } from "../../../utils/renderProfileImages";
 import CoverImage from "../../../components/CoverImage";
+import CatalogsList from "../../../components/CatalogsList";
 import "./index.scss";
 
 const Point: FC = () => {
@@ -99,6 +100,10 @@ const Point: FC = () => {
         </div>
         <h2 className="point__info__name">{data?.name}</h2>
         <div className="point__info__address">{renderAddressInfo()}</div>
+      </div>
+
+      <div className="point__catalogs">
+        <CatalogsList />
       </div>
     </section>
   );
